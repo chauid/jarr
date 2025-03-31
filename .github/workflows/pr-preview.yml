@@ -1,0 +1,48 @@
+name: PR Preview Deployment
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Build JAR
+        run: mvn clean package -DskipTests
+
+      - name: Login to NCP Container Registry
+        run: |
+          echo "${{ secrets.NCP_ACCESS_KEY }}:${{ secrets.NCP_SECRET_KEY }}" | \
+          docker login -u "${{ secrets.NCP_ACCESS_KEY }}" --password-stdin registry.ncloud.com
+
+      - name: Build & Push Docker Image
+        run: |
+          docker build -t registry.ncloud.com/wellfit-hub/springboot-preview:${{ github.head_ref }} .
+          docker push registry.ncloud.com/wellfit-hub/springboot-preview:${{ github.head_ref }}
+
+      - name: Set up kubectl
+        run: |
+          echo "${{ secrets.K8S_CONFIG }}" | base64 --decode > $HOME/.kube/config
+          kubectl config use-context my-k8s-cluster
+
+      - name: Deploy to NCP Kubernetes
+        run: |
+          kubectl apply -f k8s/deployment.yaml
+          kubectl apply -f k8s/service.yaml
+          kubectl apply -f k8s/ingress.yaml
+
+      - name: Comment Preview URL on PR
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          message: "🚀 PR Preview Deployed: https://springboot-preview-${{ github.head_ref }}.mydomain.com"
