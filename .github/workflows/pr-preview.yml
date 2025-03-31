@@ -26,12 +26,12 @@ jobs:
       - name: Login to NCP Container Registry
         run: |
           echo "${{ secrets.NCP_ACCESS_KEY }}:${{ secrets.NCP_SECRET_KEY }}" | \
-          docker login -u "${{ secrets.NCP_ACCESS_KEY }}" --password-stdin registry.ncloud.com
+          docker login -u "${{ secrets.NCP_ACCESS_KEY }}" --password-stdin wellfit-hub.kr.ncr.ntruss.com
 
       - name: Build & Push Docker Image
         run: |
-          docker build -t registry.ncloud.com/wellfit-hub/springboot-preview:${{ github.head_ref }} .
-          docker push registry.ncloud.com/wellfit-hub/springboot-preview:${{ github.head_ref }}
+          docker build -t wellfit-hub.kr.ncr.ntruss.com/wellfit-hub/springboot-preview:${{ github.head_ref }} .
+          docker push wellfit-hub.kr.ncr.ntruss.com/wellfit-hub/springboot-preview:${{ github.head_ref }}
 
       - name: Set up kubectl
         run: |
