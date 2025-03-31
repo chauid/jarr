@@ -19,7 +19,7 @@ jobs:
           java-version: '17'
 
       - name: Build JAR
-        run: mvn clean package -DskipTests
+        run: ./gradlew clean build -x test
 
       - name: Login to NCP Container Registry
         run: |
