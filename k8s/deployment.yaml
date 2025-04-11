@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deploy-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: deploy-app
+  template:
+    metadata:
+      labels:
+        app: deploy-app
+    spec:
+      nodeSelector:
+        ncloud.com/nks-nodepool: deploy
+      containers:
+      - name: app
+        image: wellfit-hub.kr.ncr.ntruss.com/jarr:IMAGE_TAG
+        ports:
+        - containerPort: 8080
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: springboot-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: springboot-app
+  template:
+    metadata:
+      labels:
+        app: springboot-app
+    spec:
+      nodeSelector:
+        ncloud.com/nks-nodepool: deploy
+      containers:
+        - name: springboot
+          image: myregistry/springboot:latest
+          ports:
+            - containerPort: 8080
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: deploy-app-service
+spec:
+  selector:
+    app: deploy-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  type: ClusterIP
