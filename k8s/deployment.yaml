@@ -19,29 +19,11 @@ spec:
         image: wellfit-hub.kr.ncr.ntruss.com/jarr:IMAGE_TAG
         ports:
         - containerPort: 8080
+        resources:
+          requests:
+            cpu: 500m
+            memory: 1024Mi
 
-
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: springboot-app
-spec:
-  replicas: 3
-  selector:
-    matchLabels:
-      app: springboot-app
-  template:
-    metadata:
-      labels:
-        app: springboot-app
-    spec:
-      nodeSelector:
-        ncloud.com/nks-nodepool: deploy
-      containers:
-        - name: springboot
-          image: myregistry/springboot:latest
-          ports:
-            - containerPort: 8080
 
 
 ---
