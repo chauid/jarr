@@ -25,17 +25,6 @@ pipeline {
                 echo '====++++executing Docker Check++++===='
                 sh 'docker version'
             }
-            post {
-                always {
-                    echo '====++++always++++===='
-                }
-                success {
-                    echo '====++++Docker Check executed successfully++++===='
-                }
-                failure {
-                    echo '====++++Docker Check execution failed++++===='
-                }
-            }
         }
 
         stage('Build Docker Image') {
