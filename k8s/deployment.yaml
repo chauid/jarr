@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: deploy-app
+  name: wellfit-app
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: deploy-app
+      app: wellfit-app
   template:
     metadata:
       labels:
-        app: deploy-app
+        app: wellfit-app
     spec:
       nodeSelector:
-        ncloud.com/nks-nodepool: deploy
+        nodetype: wellfit-deploy
       containers:
       - name: app
         image: wellfit-hub.kr.ncr.ntruss.com/jarr:IMAGE_TAG
@@ -23,17 +23,14 @@ spec:
           requests:
             cpu: 500m
             memory: 2048Mi
-
-
-
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: deploy-app-service
+  name: wellfit-app-service
 spec:
   selector:
-    app: deploy-app
+    app: wellfit-app
   ports:
     - protocol: TCP
       port: 80

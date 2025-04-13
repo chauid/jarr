@@ -4,6 +4,7 @@ pipeline {
     environment {
         IMAGE_NAME = 'wellfit-hub.kr.ncr.ntruss.com/jarr'
         TAG = "${env.BUILD_NUMBER}"
+        DOCKER_CREDENTIALS_ID = ('dockerhub-credentials')
     }
 
     stages {
