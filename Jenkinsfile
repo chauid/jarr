@@ -22,7 +22,6 @@ pipeline {
 
         stage('Docker Check') {
             steps {
-                echo '====++++executing Docker Check++++===='
                 sh 'docker version'
             }
         }
