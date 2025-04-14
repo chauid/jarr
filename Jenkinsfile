@@ -14,15 +14,14 @@ spec:
   containers:
   - name: kaniko
     image: gcr.io/kaniko-project/executor:debug
-    args:
-      - "--dockerfile=Dockerfile"
-      - "--context=."
-      - "--destination=wellfit-hub.kr.ncr.ntruss.com/jarr:1.0"
+    command:
+      - /busybox/cat
+    tty: true
     volumeMounts:
-      - name: kaniko-secret
-        mountPath: /kaniko/.docker
+      - name: docker-secret
+        mountPath: /kaniko/.docker/
   volumes:
-    - name: kaniko-secret
+    - name: docker-secret
       secret:
         secretName: docker-secret
             '''
