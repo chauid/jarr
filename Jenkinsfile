@@ -13,11 +13,11 @@ spec:
     nodetype: agent
   containers:
   - name: kaniko
-    image: gcr.io/kaniko-project/executor:latest
+    image: gcr.io/kaniko-project/executor:debug
     args:
       - "--dockerfile=Dockerfile"
       - "--context=."
-      - "--destination=wellfit-hub.kr.ncr.ntruss.com/jarr:${env.BUILD_NUMBER}"
+      - "--destination=wellfit-hub.kr.ncr.ntruss.com/jarr:1.0"
     volumeMounts:
       - name: kaniko-secret
         mountPath: /kaniko/.docker
