@@ -14,8 +14,10 @@ spec:
   containers:
   - name: kaniko
     image: gcr.io/kaniko-project/executor:latest
-    args: ["--help"]
-    tty: true
+    command:
+       - /busybox/sh
+       - -c
+       - "while true; do sleep 30; done"
     volumeMounts:
       - name: kaniko-secret
         mountPath: /kaniko/.docker
@@ -56,15 +58,15 @@ spec:
             }
         }
 
-        // stage('Build Docker Image & Push to Docker Hub') {
-        //     steps {
-        //         container('kaniko') {
-        //             sh 'ls -alF /kaniko/.docker'
-        //             sh 'cat /kaniko/.docker/.dockerconfigjson'
-        //             // sh "/kaniko/executor --context . --dockerfile Dockerfile --destination ${IMAGE_NAME}:${TAG}"
-        //         }
-        //     }
-        // }
+        stage('Build Docker Image & Push to Docker Hub') {
+            steps {
+                container('kaniko') {
+                    sh 'ls -alF /kaniko/.docker'
+                    sh 'cat /kaniko/.docker/.dockerconfigjson'
+                    // sh "/kaniko/executor --context . --dockerfile Dockerfile --destination ${IMAGE_NAME}:${TAG}"
+                }
+            }
+        }
 
         // stage('Build Docker Image with Kaniko') {
         //     steps {
