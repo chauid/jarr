@@ -13,7 +13,7 @@ spec:
     nodetype: agent
   containers:
   - name: jnlp
-    image: jenkins/inbound-agent:latest
+    image: chauid/jenkins-inbound-agent:1.0
     resources:
       requests:
         memory: "512Mi"
