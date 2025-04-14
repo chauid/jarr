@@ -41,8 +41,8 @@ spec:
     environment {
         IMAGE_NAME = 'wellfit-hub.kr.ncr.ntruss.com/jarr'
         TAG = "${env.BUILD_NUMBER}"
-        APPLICATION_PROPERTIES = ('application.properties')
-        NAVER_PROPERTIES = ('naver.properties')
+        APPLICATION_PROPERTIES = credentials('jarr_application_properties')
+        NAVER_PROPERTIES = credentials('jarr_naver_properties')
     }
 
     stages {
