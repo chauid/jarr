@@ -71,16 +71,14 @@ spec:
 
         stage('Deploy to Kubernetes') {
             steps {
-                script {
-                    sh """
-                        DEPLOYMENT_NAME = 'wellfit-app'
-                        CONTAINER_NAME = 'wellfit-app'
-                        NAMESPACE = 'wellfit-deploy'
-                        IMAGE_TAG = "${IMAGE_NAME}:${TAG}"
-                        kubectl set image deployment/\${DEPLOYMENT_NAME} \${CONTAINER_NAME}=\${IMAGE_TAG} -n \${NAMESPACE}
-                        kubectl rollout status deployment/\${DEPLOYMENT_NAME} -n \${NAMESPACE}
-                    """
-                }
+                sh """
+                    DEPLOYMENT_NAME='wellfit-app'
+                    CONTAINER_NAME='wellfit-app'
+                    NAMESPACE='wellfit-deploy'
+                    IMAGE_TAG="${IMAGE_NAME}:${TAG}"
+                    kubectl set image deployment/\${DEPLOYMENT_NAME} \${CONTAINER_NAME}=\${IMAGE_TAG} -n \${NAMESPACE}
+                    kubectl rollout status deployment/\${DEPLOYMENT_NAME} -n \${NAMESPACE}
+                """
             }
         }
     }
