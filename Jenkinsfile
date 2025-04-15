@@ -61,7 +61,8 @@ spec:
         stage('Spring Boot Version') {
             steps {
                 sh """
-                    sed -i "s/{VERSION}/$(sed -nE "s/^version *= *'([^']+)'/\1/p" build.gradle)/g" Dockerfile
+                    VERSION=\$(sed -nE "s/^version *= *'([^']+)'/\\1/p" build.gradle)
+                    sed -i "s/{VERSION}/\${VERSION}/g" Dockerfile
                 """
             }
         }
