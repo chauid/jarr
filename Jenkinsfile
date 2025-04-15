@@ -19,13 +19,6 @@ spec:
     command:
       - /busybox/cat
     tty: true
-    volumeMounts:
-      - name: docker-secret
-        mountPath: /kaniko/.docker/
-  volumes:
-    - name: docker-secret
-      secret:
-        secretName: docker-secret
             '''
         }
     }
@@ -61,8 +54,8 @@ spec:
         stage('Build Docker Image & Push to Docker Hub') {
             steps {
                 container('kaniko') {
-                    sh 'ls -alF /kaniko/.docker'
-                    sh 'cat /kaniko/.docker/.dockerconfigjson'
+                    // sh 'ls -alF /kaniko/.docker'
+                    // sh 'cat /kaniko/.docker/.dockerconfigjson'
                     sh "/kaniko/executor --context . --dockerfile Dockerfile --destination ${IMAGE_NAME}:${TAG}"
                 }
             }
