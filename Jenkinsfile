@@ -15,10 +15,17 @@ spec:
   - name: jnlp
     image: chauid/jenkins-inbound-agent:1.0
   - name: kaniko
-    image: gcr.io/kaniko-project/executor:debug
+    image: gcr.io/kaniko-project/executor:latest
     command:
       - /busybox/cat
     tty: true
+    volumeMounts:
+      - name: docker-secret
+        mountPath: /kaniko/.docker/
+  volumes:
+    - name: docker-secret
+      secret:
+        secretName: docker-secret
             '''
         }
     }
