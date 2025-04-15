@@ -1,3 +1,3 @@
 FROM eclipse-temurin:17-jdk-alpine
-COPY build/libs/jarr-{VERSION}.jar app.jar
+COPY build/libs/{PROJECT_NAME}-{VERSION}.jar app.jar
 ENTRYPOINT [ "java", "-jar", "app.jar" ]

@@ -55,6 +55,8 @@ spec:
         stage('Spring Boot Version Check') {
             steps {
                 sh """
+                    PROJECT_NAME=\$(sed -nE "s/^rootProject.name *= *'([^']+)'/\\1/p" settings.gradle)
+                    sed -i "s/{PROJECT_NAME}/\${PROJECT_NAME}/g" Dockerfile
                     VERSION=\$(sed -nE "s/^version *= *'([^']+)'/\\1/p" build.gradle)
                     sed -i "s/{VERSION}/\${VERSION}/g" Dockerfile
                 """
