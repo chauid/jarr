@@ -62,6 +62,8 @@ spec:
             steps {
                 container('kaniko') {
                     sh 'ls -alF ./'
+                    sh 'ls -alF ./src/main/resources/'
+                    sh 'ls -alF ./build/libs/'
                     sh 'ls -alF /kaniko/.docker'
                     sh 'cat /kaniko/.docker/config.json'
                     sh "/kaniko/executor --context . --dockerfile Dockerfile --destination ${IMAGE_NAME}:${TAG}"
