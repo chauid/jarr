@@ -61,7 +61,9 @@ spec:
         stage('Build Docker Image & Push to Docker Hub') {
             
             steps {
-                sh "sed -i "s/{VERSION}/$(sed -nE "s/^version *= *'([^']+)'/\1/p" build.gradle)/g" Dockerfile"
+                sh """
+                    sed -i "s/{VERSION}/$(sed -nE "s/^version *= *'([^']+)'/\1/p" build.gradle)/g" Dockerfile
+                """
             }
 
             steps {
