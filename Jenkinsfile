@@ -38,7 +38,7 @@ spec:
     }
 
     stages {
-        stage('properties') {
+        stage('Copy Properties') {
             steps {
                 sh 'cp -f ${APPLICATION_PROPERTIES} ./src/main/resources/application.properties'
                 sh 'cp -f ${NAVER_PROPERTIES} ./src/main/resources/naver.properties'
@@ -51,14 +51,8 @@ spec:
                 sh './gradlew clean build'
             }
         }
-        
-        stage('kubectl check') {
-            steps {
-                sh 'kubectl version'
-            }
-        }
 
-        stage('Spring Boot Version') {
+        stage('Spring Boot Version Check') {
             steps {
                 sh """
                     VERSION=\$(sed -nE "s/^version *= *'([^']+)'/\\1/p" build.gradle)
@@ -67,15 +61,25 @@ spec:
             }
         }
 
-        stage('Build Docker Image & Push to Docker Hub') {
+        stage('Build Docker Image & Push to Registry') {
             steps {
                 container('kaniko') {
-                    sh 'ls -alF ./'
-                    sh 'ls -alF ./src/main/resources/'
-                    sh 'ls -alF ./build/libs/'
-                    sh 'ls -alF /kaniko/.docker'
-                    sh 'cat /kaniko/.docker/config.json'
                     sh "/kaniko/executor --context . --dockerfile Dockerfile --destination ${IMAGE_NAME}:${TAG}"
+                }
+            }
+        }
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                script {
+                    def deploymentName = 'wellfit-app'
+                    def namespace = 'wellfit-deploy'
+                    def imageTag = "${IMAGE_NAME}:${TAG}"
+
+                    sh """
+                        kubectl set image deployment/\${deploymentName} \${deploymentName}=\${imageTag} -n \${namespace}
+                        kubectl rollout status deployment/\${deploymentName} -n \${namespace}
+                    """
                 }
             }
         }
