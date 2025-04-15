@@ -12,6 +12,9 @@ spec:
   nodeSelector:
     nodetype: agent
   containers:
+  - name: jnlp
+    image: chauid/jenkins-inbound-agent:1.0
+    args: ['${computer.jnlpmac} ${computer.name}']
   - name: kaniko
     image: gcr.io/kaniko-project/executor:debug
     command:
