@@ -61,25 +61,13 @@ spec:
         stage('Build Docker Image & Push to Docker Hub') {
             steps {
                 container('kaniko') {
+                    sh 'ls -alF ./'
                     sh 'ls -alF /kaniko/.docker'
                     sh 'cat /kaniko/.docker/config.json'
                     sh "/kaniko/executor --context . --dockerfile Dockerfile --destination ${IMAGE_NAME}:${TAG}"
                 }
             }
         }
-
-        // stage('Build Docker Image with Kaniko') {
-        //     steps {
-        //         container('kaniko') {
-        //             sh '''
-        //             /kaniko/executor \
-        //             --dockerfile=Dockerfile \
-        //             --context=. \
-        //             --destination=${IMAGE_NAME}:${TAG}
-        //             '''
-        //         }
-        //     }
-        // }
     }
 
     post {
