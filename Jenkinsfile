@@ -63,7 +63,7 @@ spec:
                 container('kaniko') {
                     sh 'ls -alF /kaniko/.docker'
                     sh 'cat /kaniko/.docker/.dockerconfigjson'
-                    // sh "/kaniko/executor --context . --dockerfile Dockerfile --destination ${IMAGE_NAME}:${TAG}"
+                    sh "/kaniko/executor --context . --dockerfile Dockerfile --destination ${IMAGE_NAME}:${TAG}"
                 }
             }
         }
