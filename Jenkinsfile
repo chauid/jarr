@@ -21,7 +21,7 @@ spec:
     tty: true
     volumeMounts:
       - name: docker-secret
-        mountPath: /kaniko/.docker/
+        mountPath: /kaniko/.docker
   volumes:
     - name: docker-secret
       secret:
@@ -64,8 +64,8 @@ spec:
         stage('Build Docker Image & Push to Docker Hub') {
             steps {
                 container('kaniko') {
-                    // sh 'ls -alF /kaniko/.docker'
-                    // sh 'cat /kaniko/.docker/.dockerconfigjson'
+                    sh 'ls -alF /kaniko/.docker'
+                    sh 'cat /kaniko/.docker/config.json'
                     sh "/kaniko/executor --context . --dockerfile Dockerfile --destination ${IMAGE_NAME}:${TAG}"
                 }
             }
