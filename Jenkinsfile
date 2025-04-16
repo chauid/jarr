@@ -7,7 +7,7 @@ pipeline {
         stage('Hello World') {
             steps {
                 script {
-                    hello.greet('Test1')
+                    hello('Test1')
                 }
             }
         }
