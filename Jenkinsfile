@@ -6,19 +6,25 @@ pipeline {
     stages {
         stage('Hello World') {
             steps {
-                hello('Test1')
+                script {
+                    hello.greet('Test1')
+                }
             }
         }
 
         stage('greet') {
             steps {
-                hello.greet('Test2')
+                script {
+                    hello.greet('Test2')
+                }
             }
         }
 
         stage('farewell') {
             steps {
-                hello.farewell('Test3')
+                script {
+                    hello.farewell('Test3')
+                }
             }
         }
     }
