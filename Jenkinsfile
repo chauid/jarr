@@ -38,7 +38,7 @@ pipeline {
         stage('print test') {
             steps {
                 script {
-                    hello.printSomething("${BRANCH_NAME}")
+                    hello.printSomething("${TAG}")
                 }
             }
         }
