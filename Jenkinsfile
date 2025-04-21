@@ -39,6 +39,7 @@ pipeline {
             steps {
                 script {
                     hello.printSomething("${TAG}")
+                    echo "BRANCH_NAME: ${BRANCH_NAME}"
                 }
             }
         }
