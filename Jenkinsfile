@@ -3,13 +3,6 @@
 pipeline {
     agent any
 
-    environment {
-        IMAGE_NAME = 'wellfit-hub.kr.ncr.ntruss.com/wellfit'
-        TAG = "${env.BUILD_NUMBER}"
-        APPLICATION_PROPERTIES = credentials('wellfit_application_properties')
-        BRANCH_NAME = "${env.BRANCH_NAME}"
-    }
-
     stages {
         stage('Hello World') {
             steps {
