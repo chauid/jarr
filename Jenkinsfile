@@ -31,6 +31,7 @@ pipeline {
             steps {
                 script {
                     hello.farewell('Test3')
+                    hello.sum(2, 3)
                 }
             }
         }
@@ -53,7 +54,6 @@ pipeline {
                     echo "WORKSPACE: ${WORKSPACE}"
 
                     echo "RUN_DISPLAY_URL: ${RUN_DISPLAY_URL}"
-                    echo "RUN_ID: ${RUN_ID}"
                     echo "RUN_NUMBER: ${RUN_NUMBER}"
                     echo "RUN_URL: ${RUN_URL}"
 
