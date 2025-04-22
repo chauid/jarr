@@ -40,6 +40,23 @@ pipeline {
                 script {
                     hello.printSomething("${TAG}")
                     echo "BRANCH_NAME: ${BRANCH_NAME}"
+                    echo "APPLICATION_PROPERTIES: ${APPLICATION_PROPERTIES}"
+                    echo "BUILD_ID: ${BUILD_ID}"
+                    echo "BUILD_NUMBER: ${BUILD_NUMBER}"
+                    echo "BUILD_TAG: ${BUILD_TAG}"
+                    echo "BUILD_URL: ${BUILD_URL}"
+                    echo "EXECUTOR_NUMBER: ${EXECUTOR_NUMBER}"
+                    echo "JAVA_HOME: ${JAVA_HOME}"
+                    echo "JENKINS_URL: ${JENKINS_URL}"
+                    echo "JOB_NAME: ${JOB_NAME}"
+                    echo "NODE_NAME: ${NODE_NAME}"
+                    echo "WORKSPACE: ${WORKSPACE}"
+
+                    echo "RUN_DISPLAY_URL: ${RUN_DISPLAY_URL}"
+                    echo "RUN_ID: ${RUN_ID}"
+                    echo "RUN_NUMBER: ${RUN_NUMBER}"
+                    echo "RUN_URL: ${RUN_URL}"
+
                 }
             }
         }
