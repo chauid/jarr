@@ -27,6 +27,12 @@ pipeline {
             }
         }
 
+        stage('greet test') {
+            steps {
+                greet('홍길동')
+            }
+        }
+
         stage('farewell') {
             steps {
                 script {
