@@ -1,4 +1,3 @@
-FROM openjdk:17
-ARG JAR_FILE=build/libs/*.jar
-COPY ${JAR_FILE} app.jar
-ENTRYPOINT [ "java", "-jar", "/app.jar" ]
+FROM eclipse-temurin:17-jdk-alpine
+COPY build/libs/{PROJECT_NAME}-{VERSION}.jar app.jar
+ENTRYPOINT [ "java", "-jar", "app.jar" ]

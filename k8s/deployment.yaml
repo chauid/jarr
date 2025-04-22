@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wellfit-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: wellfit-app
+  template:
+    metadata:
+      labels:
+        app: wellfit-app
+    spec:
+      nodeSelector:
+        nodetype: wellfit-deploy
+      containers:
+      - name: app
+        image: wellfit-hub.kr.ncr.ntruss.com/jarr:IMAGE_TAG
+        ports:
+        - containerPort: 8080
+        resources:
+          requests:
+            cpu: 500m
+            memory: 2048Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wellfit-app-service
+spec:
+  selector:
+    app: wellfit-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  type: ClusterIP
