@@ -39,7 +39,7 @@ pipeline {
         stage('print test') {
             steps {
                 script {
-                    hello.printSomething("${TAG}")
+                    hello.printSomething("something")
                     echo "BRANCH_NAME: ${BRANCH_NAME}"
                     echo "BUILD_ID: ${BUILD_ID}"
                     echo "BUILD_NUMBER: ${BUILD_NUMBER}"
