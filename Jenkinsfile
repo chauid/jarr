@@ -31,7 +31,8 @@ pipeline {
             steps {
                 script {
                     hello.farewell('Test3')
-                    hello.sum(2, 3)
+                    def a = hello.sum(2, 3)
+                    echo "Sum of 2 and 3 is: ${a}"
                 }
             }
         }
