@@ -1,5 +1,4 @@
 @Library('my-shared-library') _
-import example.Test
 
 pipeline {
     agent any
