@@ -15,22 +15,7 @@ pipeline {
         stage('Bulid Status') {
             steps {
                 script {
-                    // 함수 정의
-                    def setBuildStatus(String message, String state) {
-                        step([
-                            $class: "GitHubCommitStatusSetter",
-                            reposSource: [$class: "ManuallyEnteredRepositorySource", url: "${env.GIT_URL}"],
-                            contextSource: [$class: "ManuallyEnteredCommitContextSource", context: "ci/jenkins/build-status"],
-                            errorHandlers: [[$class: "ChangingBuildStatusErrorHandler", result: "UNSTABLE"]],
-                            statusResultSource: [
-                                $class: "ConditionalStatusResultSource",
-                                results: [[$class: "AnyBuildResult", message: message, state: state]]
-                            ]
-                        ])
-                    }
-
-                    // 호출
-                    setBuildStatus("빌드 완료", "SUCCESS")
+                    build.commitStatus("asdf", "SUCCESS")
                 }
             }
         }
