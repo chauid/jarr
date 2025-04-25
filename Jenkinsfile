@@ -16,7 +16,7 @@ pipeline {
             steps {
                 script {
                     // 함수 정의
-                    void setBuildStatus(String message, String state) {
+                    def setBuildStatus(String message, String state) {
                         step([
                             $class: "GitHubCommitStatusSetter",
                             reposSource: [$class: "ManuallyEnteredRepositorySource", url: "${env.GIT_URL}"],
