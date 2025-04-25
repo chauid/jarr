@@ -66,8 +66,14 @@ pipeline {
                 echo "GIT_AUTHOR_EMAIL: ${env.GIT_AUTHOR_EMAIL}"
 
                 echo "JAVA_HOME: ${env.JAVA_HOME}"
+
+            }
+        }
+
+        stage('print test2') {
+            steps {
                 script {
-                    hello.printSomething("something")
+                    test.printSomething("something")
                     sh "echo JAVA_HOME: ${env.JAVA_HOME}"
                     sh "echo JAVA_HOME: ${JAVA_HOME}"
                 }
