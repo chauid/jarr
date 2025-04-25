@@ -8,6 +8,7 @@ pipeline {
             steps {
                 script {
                     test('Test1')
+                    test.greet('World12')
                 }
             }
         }
