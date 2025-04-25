@@ -24,8 +24,8 @@ pipeline {
             steps {
                 script {
                     withCredentials([file(credentialsId: 'jarr_application_properties', variable: 'APPLICATION_PROPERTIES'), file(credentialsId: 'jarr_naver_properties', variable: 'NAVER_PROPERTIES')]) {
-                        sh "cp -f $APPLICATION_PROPERTIES ./src/main/resources/application.properties"
-                        sh "cp -f $NAVER_PROPERTIES ./src/main/resources/naver.properties"
+                        sh 'cp -f ${APPLICATION_PROPERTIES} ./src/main/resources/application.properties'
+                        sh 'cp -f ${NAVER_PROPERTIES} ./src/main/resources/naver.properties'
                     }
                 }
             }
