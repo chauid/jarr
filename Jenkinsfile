@@ -12,6 +12,41 @@ pipeline {
             }
         }
 
+        stage('Bulid Status') {
+            steps {
+                script {
+                    // 함수 정의
+                    void setBuildStatus(String message, String state) {
+                        step([
+                            $class: "GitHubCommitStatusSetter",
+                            reposSource: [$class: "ManuallyEnteredRepositorySource", url: "${env.GIT_URL}"],
+                            contextSource: [$class: "ManuallyEnteredCommitContextSource", context: "ci/jenkins/build-status"],
+                            errorHandlers: [[$class: "ChangingBuildStatusErrorHandler", result: "UNSTABLE"]],
+                            statusResultSource: [
+                                $class: "ConditionalStatusResultSource",
+                                results: [[$class: "AnyBuildResult", message: message, state: state]]
+                            ]
+                        ])
+                    }
+
+                    // 호출
+                    setBuildStatus("빌드 완료", "SUCCESS")
+                }
+            }
+        }
+
+        stage('Gradle Build') {
+            steps {
+                script {
+                    withCredentials([file(credentialsId: 'jarr_application_properties', variable: 'APPLICATION_PROPERTIES'), file(credentialsId: 'jarr_naver_properties', variable: 'NAVER_PROPERTIES')]) {
+                        sh "cp -f ${APPLICATION_PROPERTIES} ./src/main/resources/application.properties"
+                        sh "cp -f ${NAVER_PROPERTIES} ./src/main/resources/naver.properties"
+                        build.gradle()
+                    }
+                }
+            }
+        }
+
         stage('print test') {
             steps {
                 echo "BRANCH_NAME: ${env.BRANCH_NAME}"
