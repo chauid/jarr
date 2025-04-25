@@ -12,13 +12,13 @@ pipeline {
             }
         }
 
-        stage('Bulid Status') {
-            steps {
-                script {
-                    build.commitStatus("asdf", "SUCCESS")
-                }
-            }
-        }
+        // stage('Bulid Status') {
+        //     steps {
+        //         script {
+        //             build.commitStatus("asdf", "SUCCESS")
+        //         }
+        //     }
+        // }
 
         stage('Gradle Build') {
             steps {
