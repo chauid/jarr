@@ -21,7 +21,7 @@ pipeline {
         //     }
         // }
 
-        stage('Gradle Build') {
+        stage('Copy Properties') {
             steps {
                 script {
                     withCredentials([file(credentialsId: 'jarr_application_properties', variable: 'APPLICATION_PROPERTIES'), file(credentialsId: 'jarr_naver_properties', variable: 'NAVER_PROPERTIES')]) {
@@ -35,7 +35,7 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    build
+                    build()
                 }
             }
         }
