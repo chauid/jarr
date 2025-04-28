@@ -36,6 +36,7 @@ pipeline {
             steps {
                 script {
                     build()
+                    build.gradle('aa')
                 }
             }
         }
