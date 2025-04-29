@@ -1,7 +1,36 @@
 @Library('my-shared-library') _
 
 pipeline {
-    agent any
+    agent {
+        kubernetes {
+            yaml '''
+apiVersion: v1
+kind: Pod
+metadata:
+  namespace: jenkins
+  labels:
+    jenkins/agent-type: kaniko
+spec:
+  nodeSelector:
+    nodetype: agent
+  containers:
+  - name: jnlp
+    image: chauid/jenkins-inbound-agent:1.0
+  - name: kaniko
+    image: gcr.io/kaniko-project/executor:debug
+    command:
+      - /busybox/cat
+    tty: true
+    volumeMounts:
+      - name: docker-secret
+        mountPath: /kaniko/.docker
+  volumes:
+    - name: docker-secret
+      secret:
+        secretName: docker-config
+            '''
+        }
+    }
 
     stages {
         stage('Hello World') {
@@ -13,18 +42,10 @@ pipeline {
             }
         }
 
-        // stage('Bulid Status') {
-        //     steps {
-        //         script {
-        //             build.commitStatus("asdf", "SUCCESS")
-        //         }
-        //     }
-        // }
-
-        stage('Build') {
+        stage('Bulid Status') {
             steps {
                 script {
-                    build()
+                    build.commitStatus("asdf", "SUCCESS")
                 }
             }
         }
@@ -36,6 +57,15 @@ pipeline {
                         sh 'cp -f ${APPLICATION_PROPERTIES} ./src/main/resources/application.properties'
                         sh 'cp -f ${NAVER_PROPERTIES} ./src/main/resources/naver.properties'
                     }
+                }
+            }
+        }
+
+        stage('Build') {
+            steps {
+                script {
+                    build()
+                    build.gradle('BOOTJAR')
                 }
             }
         }
