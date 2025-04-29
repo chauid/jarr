@@ -45,7 +45,20 @@ spec:
         stage('Bulid Status') {
             steps {
                 script {
-                    build.commitStatus("asdf", "SUCCESS")
+                    def setBuildStatus() {
+                        step([
+                            $class: "GitHubCommitStatusSetter",
+                            reposSource: [$class: "ManuallyEnteredRepositorySource", url: "https://github.com/my-org/my-repo"],
+                            contextSource: [$class: "ManuallyEnteredCommitContextSource", context: "ci/jenkins/build-status"],
+                            errorHandlers: [[$class: "ChangingBuildStatusErrorHandler", result: "UNSTABLE"]],
+                            statusResultSource: [
+                                $class: "ConditionalStatusResultSource",
+                                results: [[$class: "AnyBuildResult", message: "message", state: "SUCCESS"]]
+                            ]
+                        ]);
+                    }
+
+                    setBuildStatus("Build complete", "SUCCESS");
                 }
             }
         }
