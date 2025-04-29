@@ -35,7 +35,7 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    qwer('Test2')
+                    qwer('Test23')
                 }
             }
         }
