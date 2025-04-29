@@ -24,11 +24,12 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    qwer('Test212')
+                    qwer()
+                    build()
                 }
             }
         }
-        
+
         stage('Copy Properties') {
             steps {
                 script {
