@@ -21,6 +21,14 @@ pipeline {
         //     }
         // }
 
+        stage('Build') {
+            steps {
+                script {
+                    qwer('Test212')
+                }
+            }
+        }
+        
         stage('Copy Properties') {
             steps {
                 script {
@@ -28,14 +36,6 @@ pipeline {
                         sh 'cp -f ${APPLICATION_PROPERTIES} ./src/main/resources/application.properties'
                         sh 'cp -f ${NAVER_PROPERTIES} ./src/main/resources/naver.properties'
                     }
-                }
-            }
-        }
-
-        stage('Build') {
-            steps {
-                script {
-                    qwer('Test212')
                 }
             }
         }
