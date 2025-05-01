@@ -1,6 +1,6 @@
 @Library('my-shared-library') _
 
-def buildStatus = commitStatus(String message, String state)
+import com.example.Buildutils
 
 pipeline {
     agent {
@@ -47,7 +47,8 @@ spec:
         stage('Bulid Status') {
             steps {
                 script {
-                    buildStatus("Build pending", "PENDING")
+                    def buildutils = new Buildutils()
+                    buildutils.setCommitStatus("Build pending", "PENDING")
                 }
             }
         }
@@ -68,7 +69,8 @@ spec:
                 script {
                     build()
                     build.gradle('BOOTJAR')
-                    buildStatus("Build complete", "SUCCESS")
+                    def buildutils = new Buildutils()
+                    buildutils.setCommitStatus("Build Complete", "SUCCESS")
                 }
             }
         }
