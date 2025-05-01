@@ -1,17 +1,6 @@
 @Library('my-shared-library') _
 
-void setBuildStatus(String message, String state) {
-    step([
-        $class: "GitHubCommitStatusSetter",
-        reposSource: [$class: "ManuallyEnteredRepositorySource", url: "${env.GIT_URL}"],
-        contextSource: [$class: "ManuallyEnteredCommitContextSource", context: "ci/jenkins/build-status"],
-        errorHandlers: [[$class: "ChangingBuildStatusErrorHandler", result: "UNSTABLE"]],
-        statusResultSource: [
-            $class: "ConditionalStatusResultSource", 
-            results: [[$class: "AnyBuildResult", message: message, state: state]]
-        ]
-    ]);
-}
+def buildStatus = commitStatus(String message, String state)
 
 pipeline {
     agent {
@@ -58,7 +47,7 @@ spec:
         stage('Bulid Status') {
             steps {
                 script {
-                    setBuildStatus("Build complete", "PENDING")
+                    buildStatus("Build pending", "PENDING")
                 }
             }
         }
@@ -79,7 +68,7 @@ spec:
                 script {
                     build()
                     build.gradle('BOOTJAR')
-                    setBuildStatus("Build complete", "SUCCESS")
+                    buildStatus("Build complete", "SUCCESS")
                 }
             }
         }
