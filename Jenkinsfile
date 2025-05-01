@@ -1,5 +1,18 @@
 @Library('my-shared-library') _
 
+void setBuildStatus(String message, String state) {
+    step([
+        $class: "GitHubCommitStatusSetter",
+        reposSource: [$class: "ManuallyEnteredRepositorySource", url: "${env.GIT_URL}"],
+        contextSource: [$class: "ManuallyEnteredCommitContextSource", context: "ci/jenkins/build-status"],
+        errorHandlers: [[$class: "ChangingBuildStatusErrorHandler", result: "UNSTABLE"]],
+        statusResultSource: [
+            $class: "ConditionalStatusResultSource", 
+            results: [[$class: "AnyBuildResult", message: message, state: state]]
+        ]
+    ]);
+}
+
 pipeline {
     agent {
         kubernetes {
@@ -45,20 +58,7 @@ spec:
         stage('Bulid Status') {
             steps {
                 script {
-                    def setBuildStatus() {
-                        step([
-                            $class: "GitHubCommitStatusSetter",
-                            reposSource: [$class: "ManuallyEnteredRepositorySource", url: "https://github.com/my-org/my-repo"],
-                            contextSource: [$class: "ManuallyEnteredCommitContextSource", context: "ci/jenkins/build-status"],
-                            errorHandlers: [[$class: "ChangingBuildStatusErrorHandler", result: "UNSTABLE"]],
-                            statusResultSource: [
-                                $class: "ConditionalStatusResultSource",
-                                results: [[$class: "AnyBuildResult", message: "message", state: "SUCCESS"]]
-                            ]
-                        ]);
-                    }
-
-                    setBuildStatus("Build complete", "SUCCESS");
+                    setBuildStatus("Build complete", "PENDING")
                 }
             }
         }
@@ -79,6 +79,7 @@ spec:
                 script {
                     build()
                     build.gradle('BOOTJAR')
+                    setBuildStatus("Build complete", "SUCCESS")
                 }
             }
         }
