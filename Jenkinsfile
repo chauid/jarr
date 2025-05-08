@@ -1,6 +1,17 @@
 @Library('my-shared-library') _
 
-import com.example.Buildutils
+void setBuildStatus(String message, String state) {
+    step([
+        $class: "GitHubCommitStatusSetter",
+        reposSource: [$class: "ManuallyEnteredRepositorySource", url: "{env.GIT_URL}"],
+        contextSource: [$class: "ManuallyEnteredCommitContextSource", context: "Jenkins"],
+        errorHandlers: [[$class: "ChangingBuildStatusErrorHandler", result: "UNSTABLE"]],
+        statusResultSource: [
+            $class: "ConditionalStatusResultSource",
+            results: [[$class: "AnyBuildResult", message: message, state: state]]
+        ]
+    ]);
+}
 
 pipeline {
     agent {
@@ -48,7 +59,7 @@ spec:
             steps {
                 script {
                     def buildutils = new Buildutils()
-                    buildutils.setCommitStatus("Build pending", "PENDING")
+                    setBuildStatus("Build pending", "PENDING")
                 }
             }
         }
@@ -68,9 +79,25 @@ spec:
             steps {
                 script {
                     build()
-                    build.gradle('BOOTJAR')
-                    def buildutils = new Buildutils()
-                    buildutils.setCommitStatus("Build Complete", "SUCCESS")
+                    build.gradle("BOOTJAR")
+                    setBuildStatus("Build Complete", "PENDING")
+                }
+            }
+        }
+
+        stage('set Dockerfile') {
+            steps {
+                script {
+                    build.setDockerfile("springboot")
+                }
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    build.image("jarr", "{env.BUILD_NUMBER}", true)
+                    setBuildStatus("Docker Image Build Complete", "PENDING")
                 }
             }
         }
@@ -129,7 +156,6 @@ spec:
                 echo "GIT_AUTHOR_EMAIL: ${env.GIT_AUTHOR_EMAIL}"
 
                 echo "JAVA_HOME: ${env.JAVA_HOME}"
-
             }
         }
 
@@ -139,6 +165,7 @@ spec:
                     test.printSomething("something")
                     sh "echo JAVA_HOME: ${env.JAVA_HOME}"
                     sh "echo JAVA_HOME: ${JAVA_HOME}"
+                    setBuildStatus("Build Complete", "SUCCESS")
                 }
             }
         }
