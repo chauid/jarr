@@ -58,7 +58,6 @@ spec:
         stage('Bulid Status') {
             steps {
                 script {
-                    def buildutils = new Buildutils()
                     setBuildStatus("Build pending", "PENDING")
                 }
             }
