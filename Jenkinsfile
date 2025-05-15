@@ -3,7 +3,7 @@
 void setBuildStatus(String message, String state) {
     step([
         $class: "GitHubCommitStatusSetter",
-        reposSource: [$class: "ManuallyEnteredRepositorySource", url: "{env.GIT_URL}"],
+        reposSource: [$class: "ManuallyEnteredRepositorySource", url: env.GIT_URL],
         contextSource: [$class: "ManuallyEnteredCommitContextSource", context: "Jenkins"],
         errorHandlers: [[$class: "ChangingBuildStatusErrorHandler", result: "UNSTABLE"]],
         statusResultSource: [
