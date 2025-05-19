@@ -95,7 +95,7 @@ spec:
         stage('Build Docker Image') {
             steps {
                 script {
-                    build.image("jarr", "{env.BUILD_NUMBER}", true)
+                    build.image("jarr", env.BUILD_NUMBER, true)
                     setBuildStatus("Docker Image Build Complete3","CD / ", "PENDING")
                 }
             }
