@@ -40,7 +40,7 @@ spec:
   volumes:
     - name: docker-secret
       secret:
-        secretName: docker-config-postsmith-hub
+        secretName: docker-config
             '''
         }
     }
