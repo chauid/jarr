@@ -58,7 +58,7 @@ spec:
         stage('Bulid Status') {
             steps {
                 script {
-                    setBuildStatus("Build Pending", "CI / Gradle Build", "PENDING")
+                    setBuildStatus("Build Pending1", "CI / Gradle Build", "PENDING")
                 }
             }
         }
@@ -79,7 +79,7 @@ spec:
                 script {
                     build()
                     build.gradle("BOOTJAR")
-                    setBuildStatus("Build Complete", "CD / ", "SUCCESS")
+                    setBuildStatus("Build Complete2", "CD / ", "SUCCESS")
                 }
             }
         }
@@ -96,7 +96,7 @@ spec:
             steps {
                 script {
                     build.image("jarr", "{env.BUILD_NUMBER}", true)
-                    setBuildStatus("Docker Image Build Complete", "PENDING")
+                    setBuildStatus("Docker Image Build Complete3","CD / ", "PENDING")
                 }
             }
         }
