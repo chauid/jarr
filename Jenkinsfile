@@ -1,10 +1,10 @@
 @Library('my-shared-library') _
 
-void setBuildStatus(String message, String state) {
+void setBuildStatus(String message, String context, String state) {
     step([
         $class: "GitHubCommitStatusSetter",
         reposSource: [$class: "ManuallyEnteredRepositorySource", url: env.GIT_URL],
-        contextSource: [$class: "ManuallyEnteredCommitContextSource", context: "Jenkins"],
+        contextSource: [$class: "ManuallyEnteredCommitContextSource", context: context],
         errorHandlers: [[$class: "ChangingBuildStatusErrorHandler", result: "UNSTABLE"]],
         statusResultSource: [
             $class: "ConditionalStatusResultSource",
@@ -58,7 +58,7 @@ spec:
         stage('Bulid Status') {
             steps {
                 script {
-                    setBuildStatus("Build pending", "PENDING")
+                    setBuildStatus("Build Pending", "CI / Gradle Build", "PENDING")
                 }
             }
         }
@@ -79,7 +79,7 @@ spec:
                 script {
                     build()
                     build.gradle("BOOTJAR")
-                    setBuildStatus("Build Complete", "PENDING")
+                    setBuildStatus("Build Complete", "CD / ", "SUCCESS")
                 }
             }
         }
@@ -95,6 +95,7 @@ spec:
         stage('Build Docker Image') {
             steps {
                 script {
+                    build.image("jarr", "{env.BUILD_NUMBER}", true)
                     setBuildStatus("Docker Image Build Complete", "PENDING")
                 }
             }
@@ -163,7 +164,9 @@ spec:
                     test.printSomething("something")
                     sh "echo JAVA_HOME: ${env.JAVA_HOME}"
                     sh "echo JAVA_HOME: ${JAVA_HOME}"
-                    setBuildStatus("Build Complete", "SUCCESS")
+                    setBuildStatus("Build Complete1", "CD / ", "SUCCESS")
+                    setBuildStatus("Build Complete2", "CD / ", "SUCCESS")
+                    setBuildStatus("Build Complete3", "CD / ", "SUCCESS")
                 }
             }
         }
