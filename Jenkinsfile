@@ -40,7 +40,7 @@ spec:
   volumes:
     - name: docker-secret
       secret:
-        secretName: docker-config
+        secretName: docker-config-smith-hub
             '''
         }
     }
@@ -95,7 +95,7 @@ spec:
         stage('Build Docker Image') {
             steps {
                 script {
-                    build.image("jarr", env.BUILD_NUMBER, true)
+                    build.image("postsmith-hub.kr.ncr.ntruss.com/jarr", env.BUILD_NUMBER, true)
                     setBuildStatus("Docker Image Build Complete3","CD / ", "PENDING")
                 }
             }
