@@ -164,9 +164,9 @@ spec:
                     test.printSomething("something")
                     sh "echo JAVA_HOME: ${env.JAVA_HOME}"
                     sh "echo JAVA_HOME: ${JAVA_HOME}"
-                    setBuildStatus("Build Complete1", "CD / ", "SUCCESS")
-                    setBuildStatus("Build Complete2", "CD / ", "SUCCESS")
-                    setBuildStatus("Build Complete3", "CD / ", "SUCCESS")
+                    setBuildStatus("Build Complete1", "asdf", "SUCCESS")
+                    setBuildStatus("Build Complete2", "asdf", "SUCCESS")
+                    setBuildStatus("Build Complete3", "asdf", "SUCCESS")
                 }
             }
         }
