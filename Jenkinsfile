@@ -95,6 +95,8 @@ spec:
         stage('Build Docker Image') {
             steps {
                 script {
+                    def tag = sh(script: "sed -nE \"s/^version *= *'([^']+)'/\\1/p\" build.gradle", returnStdout: true).trim()
+                    echo "tag: ${tag}"
                     build.image("postsmith-hub.kr.ncr.ntruss.com/jarr", env.BUILD_NUMBER, true)
                     setBuildStatus("Docker Image Build Complete3","CD / ", "PENDING")
                 }
