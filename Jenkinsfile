@@ -58,6 +58,8 @@ spec:
         stage('Bulid Status') {
             steps {
                 script {
+                    setBuildStatus("messageeeeeee", "test context", "PENDING")
+                    echo "${env.GIT_URL}"
                     env.DEPLOY_TAG = build.getProjectVersion("springboot")
                     env.DEPLOY_NAME = "postsmith-hub.kr.ncr.ntruss.com/jarr"
                 }
