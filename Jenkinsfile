@@ -95,8 +95,7 @@ spec:
         stage('Build Docker Image') {
             steps {
                 script {
-                    env.DEPLOY_TAG = sh(script: "sed -nE \"s/^version *= *'([^']+)'/\\1/p\" build.gradle", returnStdout: true).trim()
-                    echo "tag: ${tag}"
+                    env.DEPLOY_TAG = build.getProjectVersion('springboot')
                     build.image("postsmith-hub.kr.ncr.ntruss.com/jarr", env.DEPLOY_TAG, true)
                     setBuildStatus("Docker Image Build Complete3", "CD / ", "PENDING")
                 }
