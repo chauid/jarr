@@ -59,6 +59,8 @@ spec:
             steps {
                 script {
                     setBuildStatus("Build Pending1", "CI / Gradle Build", "PENDING")
+                    env.DEPLOY_TAG = build.getProjectVersion("springboot")
+                    env.DEPLOY_NAME = "postsmith-hub.kr.ncr.ntruss.com/jarr"
                 }
             }
         }
@@ -95,8 +97,7 @@ spec:
         stage('Build Docker Image') {
             steps {
                 script {
-                    env.DEPLOY_TAG = build.getProjectVersion("springboot")
-                    build.image("postsmith-hub.kr.ncr.ntruss.com/jarr", env.DEPLOY_TAG, true)
+                    build.image(env.DEPLOY_NAME, env.DEPLOY_TAG, true)
                     setBuildStatus("Docker Image Build Complete3", "CD / ", "PENDING")
                 }
             }
@@ -106,7 +107,7 @@ spec:
             steps {
                 script {
                     k8s()
-                    k8s.deploy("jarr-app", "default", "jarr-app", env.DEPLOY_TAG)
+                    k8s.deploy("jarr-app", "default", env.DEPLOY_NAME, env.DEPLOY_TAG)
                 }
             }
         }
