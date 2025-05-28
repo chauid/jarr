@@ -58,7 +58,6 @@ spec:
         stage('Bulid Status') {
             steps {
                 script {
-                    setBuildStatus("Build Pending1", "CI / Gradle Build", "PENDING")
                     env.DEPLOY_TAG = build.getProjectVersion("springboot")
                     env.DEPLOY_NAME = "postsmith-hub.kr.ncr.ntruss.com/jarr"
                 }
@@ -79,9 +78,10 @@ spec:
         stage('Build') {
             steps {
                 script {
+                    setBuildStatus("Build Pending1", "CI / Gradle Build", "PENDING")
                     build()
                     build.gradle("BOOTJAR")
-                    setBuildStatus("Build Complete2", "CD / ", "SUCCESS")
+                    setBuildStatus("Build Complete2", "CI / Gradle Build", "SUCCESS")
                 }
             }
         }
@@ -97,8 +97,9 @@ spec:
         stage('Build Docker Image') {
             steps {
                 script {
+                    setBuildStatus("Build Pending3", "CI / Docker Build", "PENDING")
                     build.image(env.DEPLOY_NAME, env.DEPLOY_TAG, true)
-                    setBuildStatus("Docker Image Build Complete3", "CD / ", "PENDING")
+                    setBuildStatus("Build Complete4", "CI / Docker Build", "SUCCESS")
                 }
             }
         }
@@ -106,8 +107,10 @@ spec:
         stage('Deploy K8s') {
             steps {
                 script {
+                    setBuildStatus("Deploy Pending", "CD / Kubernetes Rollout", "PENDING")
                     k8s()
                     k8s.deploy("jarr-app", "default", env.DEPLOY_NAME, env.DEPLOY_TAG)
+                    setBuildStatus("Deploy Complete", "CD / Kubernetes Rollout", "SUCCESS")
                 }
             }
         }
@@ -175,9 +178,7 @@ spec:
                     test.printSomething("something")
                     sh "echo JAVA_HOME: ${env.JAVA_HOME}"
                     sh "echo JAVA_HOME: ${JAVA_HOME}"
-                    setBuildStatus("Build Complete1", "asdf", "SUCCESS")
-                    setBuildStatus("Build Complete2", "asdf", "SUCCESS")
-                    setBuildStatus("Build Complete3", "asdf", "SUCCESS")
+                    setBuildStatus("Pipeline Complete Successfully", "Jenkins Pipeline", "SUCCESS")
                 }
             }
         }
