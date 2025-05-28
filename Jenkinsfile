@@ -109,7 +109,7 @@ spec:
                 script {
                     setBuildStatus("Deploy Pending", "CD / Kubernetes Rollout", "PENDING")
                     k8s()
-                    k8s.deploy("jarr-app", "default", env.DEPLOY_NAME, env.DEPLOY_TAG)
+                    k8s.deploy("jarr-app-deploy", "default", env.DEPLOY_NAME, env.DEPLOY_TAG)
                     setBuildStatus("Deploy Complete", "CD / Kubernetes Rollout", "SUCCESS")
                 }
             }
