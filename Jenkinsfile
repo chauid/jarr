@@ -15,7 +15,7 @@ spec:
     nodetype: agent
   containers:
   - name: jnlp
-    image: chauid/jenkins-inbound-agent:1.0
+    image: chauid/jenkins-inbound-agent:jdk17-k8s
   - name: kaniko
     image: gcr.io/kaniko-project/executor:debug
     command:
@@ -36,6 +36,7 @@ spec:
         stage('Hello World') {
             steps {
                 script {
+                    env.STAGE_NUMBER = 0
                     test('Test1')
                     test.greet('World12')
                 }
@@ -66,6 +67,7 @@ spec:
         stage('Build') {
             steps {
                 script {
+                    env.STAGE_NUMBER = 1
                     github.setCommitStatus("Build Pending1", "CI / Gradle Build", "PENDING")
                     build()
                     build.gradle("BOOTJAR")
@@ -85,6 +87,7 @@ spec:
         stage('Build Docker Image') {
             steps {
                 script {
+                    env.STAGE_NUMBER = 2
                     github.setCommitStatus("Build Pending3", "CI / Docker Build", "PENDING")
                     build.image(env.DEPLOY_NAME, env.DEPLOY_TAG, true)
                     github.setCommitStatus("Build Complete4", "CI / Docker Build", "SUCCESS")
@@ -98,6 +101,7 @@ spec:
             }
             steps {
                 script {
+                    env.STAGE_NUMBER = 3
                     github.setCommitStatus("Deploy Pending", "CD / Kubernetes Rollout", "PENDING")
                     k8s()
                     k8s.deploy("jarr-app-deploy", "jarr-app", "default", env.DEPLOY_NAME, env.DEPLOY_TAG)
@@ -170,6 +174,27 @@ spec:
                     sh "echo JAVA_HOME: ${env.JAVA_HOME}"
                     sh "echo JAVA_HOME: ${JAVA_HOME}"
                     github.setCommitStatus("Pipeline Complete Successfully", "Jenkins Pipeline", "SUCCESS")
+                }
+            }
+        }
+    }
+
+    post {
+        unsuccessful {
+            script {
+                switch (env.STAGE_NUMBER) {
+                    case 0:
+                        github.setCommitStatus("Failed to initialize the build process.", "Jenkins", "FAILURE")
+                        break
+                    case 1:
+                        github.setCommitStatus("Build Pending1", "CI / Gradle Build", "FAILURE")
+                        break
+                    case 2:
+                        github.setCommitStatus("Build Pending3", "CI / Docker Build", "FAILURE")
+                        break
+                    case 3:
+                        github.setCommitStatus("Deploy Pending", "CD / Kubernetes Rollout", "FAILURE")
+                        break
                 }
             }
         }
