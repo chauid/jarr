@@ -49,6 +49,7 @@ spec:
         stage('Hello World') {
             steps {
                 script {
+                    github.setCommitStatus("Build Pending1", "CI / Gradle Build", "PENDING")
                     test('Test1')
                     test.greet('World12')
                 }
