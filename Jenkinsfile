@@ -49,16 +49,7 @@ spec:
         stage('Hello World') {
             steps {
                 script {
-                    step([
-                        $class: "GitHubCommitStatusSetter",
-                        reposSource: [$class: "ManuallyEnteredRepositorySource", url: env.GIT_URL],
-                        contextSource: [$class: "ManuallyEnteredCommitContextSource", context: "context"],
-                        errorHandlers: [[$class: "ChangingBuildStatusErrorHandler", result: "UNSTABLE"]],
-                        statusResultSource: [
-                            $class: "ConditionalStatusResultSource",
-                            results: [[$class: "AnyBuildResult", message: "message", state: "state"]]
-                        ]
-                    ]);
+                    github.setCommitStatus("Hello World", "CI / Hello World", "PENDING")
                     test('Test1')
                     test.greet('World12')
                 }
