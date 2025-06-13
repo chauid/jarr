@@ -93,11 +93,14 @@ spec:
         }
 
         stage('Deploy K8s') {
+            when {
+                anyOf { branch 'main'; branch 'PR-*' }
+            }
             steps {
                 script {
                     github.setCommitStatus("Deploy Pending", "CD / Kubernetes Rollout", "PENDING")
                     k8s()
-                    k8s.deploy("jarr-app-deploy", "default", env.DEPLOY_NAME, env.DEPLOY_TAG)
+                    k8s.deploy("jarr-app-deploy", "jarr-app", "default", env.DEPLOY_NAME, env.DEPLOY_TAG)
                     github.setCommitStatus("Deploy Complete", "CD / Kubernetes Rollout", "SUCCESS")
                 }
             }
