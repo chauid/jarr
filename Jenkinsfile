@@ -1,18 +1,5 @@
 @Library('my-shared-library') _
 
-void setBuildStatus(String message, String context, String state) {
-    step([
-        $class: "GitHubCommitStatusSetter",
-        reposSource: [$class: "ManuallyEnteredRepositorySource", url: env.GIT_URL],
-        contextSource: [$class: "ManuallyEnteredCommitContextSource", context: context],
-        errorHandlers: [[$class: "ChangingBuildStatusErrorHandler", result: "UNSTABLE"]],
-        statusResultSource: [
-            $class: "ConditionalStatusResultSource",
-            results: [[$class: "AnyBuildResult", message: message, state: state]]
-        ]
-    ]);
-}
-
 pipeline {
     agent {
         kubernetes {
@@ -49,7 +36,6 @@ spec:
         stage('Hello World') {
             steps {
                 script {
-                    github.setCommitStatus("Hello World", "CI / Hello World", "PENDING")
                     test('Test1')
                     test.greet('World12')
                 }
@@ -80,10 +66,10 @@ spec:
         stage('Build') {
             steps {
                 script {
-                    setBuildStatus("Build Pending1", "CI / Gradle Build", "PENDING")
+                    github.setCommitStatus("Build Pending1", "CI / Gradle Build", "PENDING")
                     build()
                     build.gradle("BOOTJAR")
-                    setBuildStatus("Build Complete2", "CI / Gradle Build", "SUCCESS")
+                    github.setCommitStatus("Build Complete2", "CI / Gradle Build", "SUCCESS")
                 }
             }
         }
@@ -99,9 +85,9 @@ spec:
         stage('Build Docker Image') {
             steps {
                 script {
-                    setBuildStatus("Build Pending3", "CI / Docker Build", "PENDING")
+                    github.setCommitStatus("Build Pending3", "CI / Docker Build", "PENDING")
                     build.image(env.DEPLOY_NAME, env.DEPLOY_TAG, true)
-                    setBuildStatus("Build Complete4", "CI / Docker Build", "SUCCESS")
+                    github.setCommitStatus("Build Complete4", "CI / Docker Build", "SUCCESS")
                 }
             }
         }
@@ -109,10 +95,10 @@ spec:
         stage('Deploy K8s') {
             steps {
                 script {
-                    setBuildStatus("Deploy Pending", "CD / Kubernetes Rollout", "PENDING")
+                    github.setCommitStatus("Deploy Pending", "CD / Kubernetes Rollout", "PENDING")
                     k8s()
                     k8s.deploy("jarr-app-deploy", "default", env.DEPLOY_NAME, env.DEPLOY_TAG)
-                    setBuildStatus("Deploy Complete", "CD / Kubernetes Rollout", "SUCCESS")
+                    github.setCommitStatus("Deploy Complete", "CD / Kubernetes Rollout", "SUCCESS")
                 }
             }
         }
@@ -180,7 +166,7 @@ spec:
                     test.printSomething("something")
                     sh "echo JAVA_HOME: ${env.JAVA_HOME}"
                     sh "echo JAVA_HOME: ${JAVA_HOME}"
-                    setBuildStatus("Pipeline Complete Successfully", "Jenkins Pipeline", "SUCCESS")
+                    github.setCommitStatus("Pipeline Complete Successfully", "Jenkins Pipeline", "SUCCESS")
                 }
             }
         }
